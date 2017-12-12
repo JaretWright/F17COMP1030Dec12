@@ -17,11 +17,12 @@ public class TicTacToe {
         
         initalizeGameBoard();
         
-       // do{
+        do{
             displayGameBoard();
             makeMove();
-     //   } while (!gameWon());
+        } while (!gameWon());
         
+        displayGameBoard();
     }
     
     /**
@@ -42,6 +43,13 @@ public class TicTacToe {
             System.out.print("Enter the col (1-3): ");
             col=keyboard.nextInt();
         } while (invalidPosition(--row, --col));
+        
+        gameBoard[row][col]=currentPlayer;
+        
+        if (currentPlayer.equals("X"))
+            currentPlayer="O";
+        else
+            currentPlayer="X";
     }
     
     /**
@@ -101,5 +109,81 @@ public class TicTacToe {
             if (row < 2)
                 System.out.printf("-----------%n");
         }
+        
+        
     }
+    /**
+    * This method will validate if there is a winner by
+    * -checking if 3 positions in a row are the same character
+    * -checking if 3 positions in a column are the same character
+    * -checking if the diagonals are the same character
+    * -or establishing if the gameBoard is full
+    * -it will display the winner or a tie
+    */
+   public static boolean gameWon()
+   {
+       //check for winner in a row
+       for(int row=0; row<gameBoard.length; row++)
+       {
+           if (gameBoard[row][0].equals(gameBoard[row][1]) 
+                        && gameBoard[row][1].equals(gameBoard[row][2])
+                        && !gameBoard[row][0].equals(" "))
+           {
+               System.out.printf("The winner is %s%n", gameBoard[row][0]);
+               return true;
+           }
+       }
+       
+       
+       //check for winner in a col
+       for(int col=0; col<gameBoard[0].length; col++)
+       {
+           if (gameBoard[0][col].equals(gameBoard[1][col]) 
+                        && gameBoard[1][col].equals(gameBoard[2][col])
+                        && !gameBoard[0][col].equals(" "))
+           {
+               System.out.printf("The winner is %s%n", gameBoard[0][col]);
+               return true;
+           }
+       }
+       
+       //check the diagonal from upper left to lower right
+       if    (gameBoard[0][0].equals(gameBoard[1][1]) 
+           && gameBoard[1][1].equals(gameBoard[2][2])
+           && gameBoard[0][0] != " ")
+       {
+           System.out.printf("The winner is %s%n", gameBoard[0][0]);
+           return true;
+       }
+       
+       //check the diagonal from upper right to lower left
+       if    (gameBoard[0][2].equals(gameBoard[1][1]) 
+           && gameBoard[1][1].equals(gameBoard[2][0])
+           && gameBoard[0][2] != " ")
+       {
+           System.out.printf("The winner is %s%n", gameBoard[0][2]);
+           return true;
+       }    
+           
+       if (gameBoardFull())
+       {
+           System.out.printf("All the positions are taken without a winner-tie%n");
+           return true;
+       }
+       else
+           return false;
+   }
+   
+   public static boolean gameBoardFull()
+   {
+       for (int row=0; row<gameBoard.length; row++)
+       {
+           for (int col=0; col<gameBoard[row].length; col++)
+           {
+               if (gameBoard[row][col].equals(" "))
+                   return false;
+           }
+       }
+       return true;
+   }
 }
